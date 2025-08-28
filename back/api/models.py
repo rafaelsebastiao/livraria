@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class Autor(models.Model):
     autor = models.CharField(max_length=100)
     s_autor = models.CharField(max_length=100)
