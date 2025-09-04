@@ -4,24 +4,24 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from api.models import Autor
 
+
 class Command(BaseCommand):
    def add_arguments(self, parser):
         # parser.add_argument("--arquivo", default="population/autores.csv")
         parser.add_argument("--arquivo", default="C:/Users/44794549857/Documents/livraria/back/api/population/autores.csv")
         parser.add_argument("--truncate", action="store_true")
         parser.add_argument("--update", action="store_true")
-
    @transaction.atomic
+
    def handle(self, *a, **o):
         df = pd.read_csv(o["arquivo"], encoding="utf-8-sig" )
         df.columns = [c.strip().lower().lstrip("\ufeff") for c in df.columns]
         #Normaliza os nomes das colunas: tira os espaços extras, deixa em minúsculo e remove o ufeff
         #o \ufeff é um caractere especial invisível 
-
         if o["truncate"]: Autor.objects.all().delete()
 
         df['autor'] = df['autor'].astype(str).str.strip()
-
+        
         df['s_autor'] = df['s_autor'].astype(str).str.strip()
 
         df['nasc'] = pd.to_datetime(df["data_nasc"], errors="coerce", format="%Y-%m-%d").dt.date
@@ -55,7 +55,7 @@ class Command(BaseCommand):
 
             Autor.objects.bulk_create(objs, ignore_conflicts=True)
             # bulk_create está jogando no banco reserva sem os dado sem conflito
-
+            
             self.stdout.write(self.style.SUCCESS(f'Criados {len(objs)}'))
 
         # autor, s_autor, nasc, nacio
