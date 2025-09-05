@@ -4,7 +4,6 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from api.models import Autor
 
-
 class Command(BaseCommand):
    def add_arguments(self, parser):
         # parser.add_argument("--arquivo", default="population/autores.csv")
@@ -57,5 +56,3 @@ class Command(BaseCommand):
             # bulk_create está jogando no banco reserva sem os dado sem conflito
             
             self.stdout.write(self.style.SUCCESS(f'Criados {len(objs)}'))
-
-        # autor, s_autor, nasc, nacio
