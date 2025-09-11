@@ -6,6 +6,7 @@ class AutorSerializer(serializers.ModelSerializer):
         model = Autor
         fields = '__all__'
 
+
 class EditoraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Editora

@@ -8,8 +8,6 @@ class Command(BaseCommand):
         parser.add_argument("--arquivo_editoras", default="C:/Users/44794549857/Documents/livraria/back/api/population/editoras.csv")
         parser.add_argument("--arquivo_autores", default="C:/Users/44794549857/Documents/livraria/back/api/population/autores.csv")
         parser.add_argument("--arquivo_livros", default="C:/Users/44794549857/Documents/livraria/back/api/population/livros.csv")
-
-
         parser.add_argument("--truncate", action="store_true")
         parser.add_argument("--update", action="store_true")
         
@@ -17,8 +15,7 @@ class Command(BaseCommand):
     def handle(self, *a, **o):
         df_editoras = pd.read_csv(o["arquivo_editoras"], encoding="utf-8-sig")
         df_autores = pd.read_csv(o["arquivo_autores"], encoding="utf-8-sig")
-        df_livros = pd.read_csv(o["arquivo_livros"], encoding="utf-8-sig", quotechar='"')
-
+        df_livros = pd.read_csv(o["arquivo_livros"], encoding="utf-8-sig")
         df_editoras.columns = [c.strip().lower().lstrip("\ufeff") for c in df_editoras.columns]
         df_autores.columns = [c.strip().lower().lstrip("\ufeff") for c in df_autores.columns]
         df_livros.columns = [c.strip().lower().lstrip("\ufeff") for c in df_livros.columns]
@@ -40,7 +37,7 @@ class Command(BaseCommand):
         
         # 4) Buscar autor de livros no dicionário e retornar "id"
         df_livros['id_autor'] = df_livros['autor'].map(mapa_autores)
-        # df_livros.to_excel("livors.xlsx", index=False)
+        #df_livros.to_excel("livors.xlsx", index=False)
         
         
         ###### Livros e Editoras #####
@@ -53,9 +50,13 @@ class Command(BaseCommand):
         
         # 3) Criar o "id_editora" em livros
         df_livros['id_editora'] = df_livros["editora"].map(mapa_editoras)
+
+        #df_livros.to_excel("livors.xlsx", index=False)
+        
         
         if o["truncate"]: Livro.objects.all().delete()
         
+
         df_livros['titulo']=df_livros["titulo"].astype(str).str.strip()
         df_livros['subtitulo']=df_livros["subtitulo"].astype(str).str.strip()
         
@@ -73,7 +74,6 @@ class Command(BaseCommand):
         df_livros['disponivel']=df_livros["disponivel"].astype(bool)
         df_livros['dimensoes']=df_livros["dimensoes"].astype(str).str.strip()
         df_livros['peso']=df_livros["peso"].astype(float)
-
 
         if o["update"]:
             criados = atualizados = 0

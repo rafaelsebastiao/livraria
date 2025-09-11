@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from api.models import Editora
 
+
 class Command(BaseCommand):
    def add_arguments(self, parser):
         # parser.add_argument("--arquivo", default="population/autores.csv")
