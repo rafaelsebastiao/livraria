@@ -1,3 +1,5 @@
+import os
+from django.conf import settings
 import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -6,8 +8,11 @@ from api.models import Editora
 
 class Command(BaseCommand):
    def add_arguments(self, parser):
-        # parser.add_argument("--arquivo", default="population/autores.csv")
-        parser.add_argument("--arquivo", default="C:/Users/44794549857/Documents/livraria/back/api/population/editoras.csv")
+        parser.add_argument(
+            "--arquivo",
+            default=os.path.join(settings.BASE_DIR, "api", "population", "editoras.csv")
+        )
+        
         parser.add_argument("--truncate", action="store_true")
         parser.add_argument("--update", action="store_true")
    
