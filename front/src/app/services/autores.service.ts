@@ -1,8 +1,8 @@
 import { Injectable, inject} from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 import { Autor } from "../models/Autor";
 import { environments } from "../environments/environments";
-import { Observable } from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class AutoresService{
