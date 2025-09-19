@@ -1,7 +1,7 @@
 import {Injectable, signal} from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
-import { environments } from "../environments/environments";
+import { environments } from "../environments/environment";
 import { Token } from "@angular/compiler";
 
 type TokenPair = {access: string, refresh?: string}

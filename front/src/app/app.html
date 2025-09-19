@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<style>
-  a{
-    color:white;
-  }
-</style>
-<body>
-  <header>
-    <nav style="background-color: blue; display: flex; padding:10px; gap: 2rem;">
-      <a routerlink="/autores" style="color: white;">Inicio</a>
-      <a routerlink="/editoras">Autor</a>
-      <a routerlink="Livros">Editora</a>
-      <a>Livro</a>
-      <button style="cursor:pointer">Sair</button>
-    </nav>
-  </header>
-  <main></main>
-</body>
-</html>
+<header style="border-bottom:1px solid #eee">
+  <nav style="max-width:900px;margin:0 auto;padding:1rem;display:flex;gap:1rem;align-items:center">
+    <a routerLink="/">Início</a>
+    <a routerLink="/autores">Autores</a>
+    <span style="flex:1"></span>
+    <button (click)="logout()" style="padding:.4rem .7rem;border:1px solid #ddd;border-radius:8px;background:#fff">Sair</button>
+  </nav>
+</header>
+<main><router-outlet></router-outlet></main>
+

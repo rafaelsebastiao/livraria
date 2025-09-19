@@ -2,14 +2,13 @@ import { Component, inject, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import { AutoresService } from "../../services/autores.service";
-import { Autor } from "../../models/Autor";
+import { Autor } from "../../models/autor";
 
 @Component({
     standalone: true,
     imports: [RouterLink], 
     template: `
-        <section></section>
-    
+    <h1>Teste</h1>
     `
 })
 
