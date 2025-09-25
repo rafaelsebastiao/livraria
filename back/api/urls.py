@@ -9,7 +9,7 @@ urlpatterns = [
     path('autor/<int:pk>', AutoresDetailView.as_view(), name='autores-detail'),
     path('authors', listar_autores, name='Listar Autores'),
    
-    path('editoras', EditorasView.as_view()),
+    path('editoras/', EditorasView.as_view()),
     path('editora/<int:pk>', EditorasDetailView.as_view()),
    
     path('livros', LivrosView.as_view()),
