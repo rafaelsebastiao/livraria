@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
 
+
+
 @Component({
     selector:'app-home',
     standalone: true,
@@ -13,7 +15,7 @@ import { RouterLink } from "@angular/router";
       <nav style="margin-top:1rem; display:flex; gap:.75rem">
         <a routerLink="autores">Ver autores</a>
         <a routerLink="editoras">Ver Editoras</a>
-        
+        <a routerLink="livros">Ver Livros</a>
       </nav>
     </section>
   `

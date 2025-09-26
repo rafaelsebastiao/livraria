@@ -44,8 +44,6 @@ import { EditorasService } from '../../services/editoras.services';
     erro = signal<string | null>(null);
   
     constructor() {
-      
-      
       this.svc.listar().subscribe({
         next: (data) => { this.editoras.set(data); this.carregando.set(false); },
         error: () => { this.erro.set('Falha ao carregar editoras'); this.carregando.set(false); }

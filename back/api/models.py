@@ -9,6 +9,7 @@ class Autor(models.Model):
 
     def __str__(self):
         return f'{self.autor} {self.s_autor}'
+    
 
 class Editora(models.Model):
     editora = models.CharField(max_length=100)
@@ -20,7 +21,8 @@ class Editora(models.Model):
 
     def __str__(self):
         return self.editora
-
+    
+    
 class Livro(models.Model):
     titulo = models.CharField(max_length=50)
     subtitulo = models.CharField(max_length=255)
@@ -37,3 +39,7 @@ class Livro(models.Model):
     disponivel=models.BooleanField(default=True)
     dimensoes=models.CharField()
     peso=models.DecimalField(max_digits=10, decimal_places=2)
+
+class User(models.Model):
+    email = models.CharField(),
+    password = models.CharField()

@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AutoresService } from '../../services/autores.services';
 import { Autor } from '../../models/autor';
 import { AuthService } from '../../services/auth.services';
-
+import { UserService } from '../../services/users.services';
 
 @Component({
   standalone: true,
@@ -35,6 +35,8 @@ import { AuthService } from '../../services/auth.services';
     </section>
   `
 })
+
+
 export class AutoresPage {
   private svc = inject(AutoresService);
   private auth = inject(AuthService);   //Ver o token
@@ -44,7 +46,7 @@ export class AutoresPage {
 
   constructor() {
     console.log("Token de acesso: ", this.auth.token());
-    
+
     this.svc.listar().subscribe({
       next: (data) => { this.autores.set(data); this.carregando.set(false); },
       error: () => { this.erro.set('Falha ao carregar autores'); this.carregando.set(false); }
