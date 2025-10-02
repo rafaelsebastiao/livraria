@@ -25,8 +25,6 @@ class LivroSerializer(serializers.ModelSerializer):
 
 
 User = get_user_model()
-
-
 class RegisterSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,

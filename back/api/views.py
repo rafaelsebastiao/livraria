@@ -54,6 +54,7 @@ class EditorasView(ListCreateAPIView):
     search_fields = ['autor', 's_autor'] #não extato  
 
 
+
 class EditorasDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Editora.objects.all()
     serializer_class = EditoraSerializer
@@ -62,14 +63,12 @@ class EditorasDetailView(RetrieveUpdateDestroyAPIView):
 class LivrosView(ListCreateAPIView):
     queryset = Livro.objects.all()
     serializer_class = LivroSerializer
-    permission_classes =[IsAuthenticated]
+    # permission_classes =[IsAuthenticated]
 
 class LivrosDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Livro.objects.all()
     serializer_class = LivroSerializer
-    permission_classes =[IsAuthenticated]
-
-
+    # permission_classes =[IsAuthenticated]
 
 class RegisterView(CreateAPIView):
     permission_classes = [AllowAny]
@@ -84,5 +83,3 @@ class RegisterView(CreateAPIView):
             'user': {'id': user.id, 'username': user.username},
             'tokens': {'refresh': str(refresh), 'access': str(refresh.access_token)}
         }, status=status.HTTP_201_CREATED)
-        
-    
