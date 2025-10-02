@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../services/auth.services";
-import { UserService } from "../../services/users.services";
+
 
 @Component(
     {
@@ -17,10 +17,8 @@ import { UserService } from "../../services/users.services";
     
     <nav style="margin-top:1rem; display:flex; gap:.75rem">
     
-    <a (click)="loginValidate(email.value, password.value)">Logar</a>
     <button (click)="loginValidate(email.value, password.value)">Logar</button>
     
-    <a routerLink="editoras">Ver Editoras</a>
     </nav>
     </section>
     `
@@ -30,16 +28,27 @@ import { UserService } from "../../services/users.services";
 )
 
 
-
 export class LoginComponent {
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) {}
+
+    
     loginValidate(email: string, password: string){
         if (email == ''|| password == ''){
             alert("Login inválido!");
         }else{
-
-
+            this.authService.login(email, password).subscribe({
+                next: (tokens) => {
+                  console.log('Login bem-sucedido', tokens);
+                  this.router.navigate(['/']);
+                },
+                error: (err) => {
+                  console.error('Erro ao logar', err);
+                  alert('Credenciais inválidas. Verifique seu usuário e senha.');
+                }                
+              });
         }
     }
-
-
 }

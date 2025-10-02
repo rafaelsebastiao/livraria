@@ -11,7 +11,6 @@ import { map } from 'rxjs';
 })
 
 
-
 export class UserService {
   private http = inject(HttpClient);
   private base = environment.apiBase;
@@ -28,9 +27,6 @@ export class UserService {
     const url = `${this.base}api/users/`;
     return this.http.get<User[]>(url);  
   }
-
-
-
 
 }
 
