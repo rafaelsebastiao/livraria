@@ -3,6 +3,9 @@ import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../services/auth.services";
 import { HttpClient } from "@angular/common/http";
 
+
+
+
 @Component(
     {
     selector:'app-login',
@@ -13,7 +16,7 @@ import { HttpClient } from "@angular/common/http";
     <h1 style="margin:0 0 .75rem">Cadastro</h1>
     <hr>
     <input #email id="email" placeholder="Nome de usuário" />
-    <input #password id="password" placeholder="Senha" />
+    <input #password id="password" type="password" placeholder="Senha" />
     
     <nav style="margin-top:1rem; display:flex; gap:.75rem">
     <button (click)="registerUser(email.value, password.value)">Cadastrar</button>
@@ -23,6 +26,7 @@ import { HttpClient } from "@angular/common/http";
 }
    
 )
+
 
 
 export class RegisterComponent {
@@ -56,4 +60,6 @@ export class RegisterComponent {
         
     }
 
+
 }
+

@@ -1,54 +1,61 @@
-import { Component } from "@angular/core";
-import { Router, RouterLink } from "@angular/router";
-import { AuthService } from "../../services/auth.services";
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink} from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, Validators} from '@angular/forms';
+import { AuthService } from '../../services/auth.services';
 
 
-@Component(
-    {
-    selector:'app-login',
-    standalone: true,
-    imports: [RouterLink],
-    template: `
-    <section style="max-width:900px;margin:2rem auto;padding:0 1rem">
-    <h1 style="margin:0 0 .75rem">Login</h1>
-    
-    <input #email id="email" placeholder="Informe seu email" />
-    <input #password id="password" placeholder="Senha" />
-    
-    <nav style="margin-top:1rem; display:flex; gap:.75rem">
-    
-    <button (click)="loginValidate(email.value, password.value)">Logar</button>
-    
-    </nav>
-    </section>
-    `
+@Component({
+  selector: 'app-login.component',
+  standalone: true,
+  imports: [RouterLink, ReactiveFormsModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
 
-}
-   
-)
-
+})
 
 export class LoginComponent {
-    constructor(
-        private authService: AuthService,
-        private router: Router
-    ) {}
+  //fb => FormBuilder
+  private fb = inject(FormBuilder)
+  private auth = inject(AuthService)
+  private router = inject(Router)
+  
+  loading = signal(false)
+  error = signal<String | null>(null)
 
-    
-    loginValidate(email: string, password: string){
-        if (email == ''|| password == ''){
-            alert("Login inválido!");
-        }else{
-            this.authService.login(email, password).subscribe({
-                next: (tokens) => {
-                  console.log('Login bem-sucedido', tokens);
-                  this.router.navigate(['/']);
-                },
-                error: (err) => {
-                  console.error('Erro ao logar', err);
-                  alert('Credenciais inválidas. Verifique seu usuário e senha.');
-                }                
-              });
-        }
-    }
+  form = this.fb.group({
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]],
+  })
+
+
+  onSubmit(){
+    if(this.form.invalid) return
+    this.loading.set(true)
+    this.error.set(null)
+
+    const {username, password} = this.form.value as {username: string, password: string}
+
+    this.auth.login(username, password).subscribe({
+      next: () => {
+        this.loading.set(false)
+        this.router.navigateByUrl('/home')
+
+      },
+
+      //e => Vem de evento
+      error: (e)=>{
+        this.loading.set(false)
+        this.error.set("Usuário ou senha inválida...")
+        console.log("O erro é: ", e);
+        
+      }
+
+    })
+
+  }
+  
+  
+  constructor(){
+
+  }  
 }

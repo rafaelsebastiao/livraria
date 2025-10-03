@@ -10,7 +10,7 @@ import { EditorasService } from '../../services/editoras.services';
     template: `
       <section style="max-width:900px;margin:2rem auto;padding:0 1rem">
         <h1>Editoras</h1>
-  
+        
         @if (carregando()) {
           <p>Carregando…</p>
         } @else if (erro()) {
@@ -45,7 +45,11 @@ import { EditorasService } from '../../services/editoras.services';
   
     constructor() {
       this.svc.listar().subscribe({
-        next: (data) => { this.editoras.set(data); this.carregando.set(false); },
+        next: (data) => { 
+          this.editoras.set(data); 
+          this.carregando.set(false); 
+        },
+        
         error: () => { this.erro.set('Falha ao carregar editoras'); this.carregando.set(false); }
       });
     }

@@ -11,6 +11,7 @@ const storage = {
   del: (k: string) => { if (typeof localStorage !== 'undefined') localStorage.removeItem(k); },
 };
 
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private _access = signal<string | null>(storage.get('access'));
@@ -24,7 +25,7 @@ export class AuthService {
   token = () => this._access();
 
   login(username: string, password: string): Observable<TokenPair> {
-    const AUTH_URL = `${this.base}/token/`;
+    const AUTH_URL = `${this.base}/api/token/`;
     
     
     return this.http.post<TokenPair>(AUTH_URL, { username, password }).pipe(
@@ -36,6 +37,7 @@ export class AuthService {
     );
   }
   
+
   refresh(): Observable<{ access: string }> {
     const REFRESH_URL = `${this.base}/refresh/`;
     const refresh = this._refresh();
@@ -44,6 +46,8 @@ export class AuthService {
     );
   }
 
+  
+  
   logout() {
     this._access.set(null); this._refresh.set(null);
     storage.del('access'); storage.del('refresh');

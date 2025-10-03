@@ -13,9 +13,9 @@ import { RouterLink } from "@angular/router";
       <p>Esta é a página inicial.</p>
 
       <nav style="margin-top:1rem; display:flex; gap:.75rem">
-        <a routerLink="autores">Ver autores</a>
-        <a routerLink="editoras">Ver Editoras</a>
-        <a routerLink="livros">Ver Livros</a>
+        <a routerLink="/autores">Ver autores</a>
+        <a routerLink="/editoras">Ver Editoras</a>
+        <a routerLink="/livros">Ver Livros</a>
       </nav>
     </section>
   `
