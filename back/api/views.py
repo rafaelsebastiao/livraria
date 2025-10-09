@@ -9,11 +9,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 # Filters
 from .filters import AutorFilter 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-
 
 @api_view(['GET', 'POST'])
 def listar_autores(request):
@@ -52,7 +52,6 @@ class EditorasView(ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['id'] #exato
     search_fields = ['autor', 's_autor'] #não extato  
-
 
 
 class EditorasDetailView(RetrieveUpdateDestroyAPIView):

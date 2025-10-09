@@ -9,7 +9,6 @@ import { AuthService } from '../../services/auth.services';
   standalone: true,
   imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
 
 })
 
@@ -18,6 +17,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder)
   private auth = inject(AuthService)
   private router = inject(Router)
+
   
   loading = signal(false)
   error = signal<String | null>(null)
@@ -26,7 +26,6 @@ export class LoginComponent {
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
   })
-
 
   onSubmit(){
     if(this.form.invalid) return
@@ -41,21 +40,16 @@ export class LoginComponent {
         this.router.navigateByUrl('/home')
 
       },
-
       //e => Vem de evento
       error: (e)=>{
         this.loading.set(false)
         this.error.set("Usuário ou senha inválida...")
         console.log("O erro é: ", e);
-        
+    
       }
 
     })
 
   }
   
-  
-  constructor(){
-
-  }  
 }
