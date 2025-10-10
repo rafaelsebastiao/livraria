@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Autor, Editora, Livro
+from .models import Autor, Editora, Livro, Imagem
+
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
@@ -25,6 +26,7 @@ class LivroSerializer(serializers.ModelSerializer):
 
 
 User = get_user_model()
+
 class RegisterSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,
@@ -44,3 +46,21 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             password=validated_data['password']
         )
+    
+
+
+class ImagemSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model=Imagem
+        fields=['id', 'imagem', 'url', 'criado_em']
+        read_only_fields = ['id', 'url', 'criado_em']
+
+    def get_url(self, obj):
+        request = self.context.get("request")
+
+        if request:
+            #URI => Endereço de imagem
+            return request.build.absolute_uri(obj.imagem.url)
+        return obj.imagem.url

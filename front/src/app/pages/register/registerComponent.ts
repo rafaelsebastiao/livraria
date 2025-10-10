@@ -1,43 +1,36 @@
-import { Component } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../services/auth.services";
 import { HttpClient } from "@angular/common/http";
+import { ReactiveFormsModule, FormBuilder, Validators} from "@angular/forms";
 
 
-
-
-@Component(
-    {
-    selector:'app-login',
+@Component({
+    selector:'app-login.component',
     standalone: true,
-    imports: [RouterLink],
-    template: `
-    <section style="max-width:900px;margin:2rem auto;padding:0 1rem">
-    <h1 style="margin:0 0 .75rem">Cadastro</h1>
-    <hr>
-    <input #email id="email" placeholder="Nome de usuário" />
-    <input #password id="password" type="password" placeholder="Senha" />
-    
-    <nav style="margin-top:1rem; display:flex; gap:.75rem">
-    <button (click)="registerUser(email.value, password.value)">Cadastrar</button>
-    </nav>
-    </section>
-    `
-}
-   
+    templateUrl:'./register.component.html'
+    }
 )
 
 
-
 export class RegisterComponent {
+    error = signal<String | null>(null)
+    loading = signal(false)
+
+
+    private fb = inject(FormBuilder)
+    
+    form = this.fb.group({
+        username: ['', [Validators.required]],
+        password: ['', [Validators.required]],
+      })
+
     constructor(
         private authService: AuthService,
         private router: Router,
         private http : HttpClient
-
-
+        
     ) {}
-    
 
 
     registerUser(username: string, password: string){
@@ -57,9 +50,7 @@ export class RegisterComponent {
                 error: err => alert('Erro no cadastro')
               });
         }
-        
     }
-
 
 }
 

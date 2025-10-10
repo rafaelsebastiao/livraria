@@ -3,11 +3,11 @@
         mx-auto → margens horizontais automáticas (centraliza).
         mt-12 → margem superior de 3rem.
         px-4 → padding horizontal de 1rem (esquerda/direita). -->
-  <h1 class="mb-4 text-2xl font-semibold">Entrar</h1>
+  <h1 class="mb-4 text-2xl font-semibold">Cadastrar</h1>
   <!--  mb-4 → margem inferior de 1rem.
         text-2xl → tamanho de fonte grande (≈ 24px por padrão).
         font-semibold → peso de fonte semi-negrito. -->
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-4">
+  <form novalidate class="space-y-4">
     <!-- space-y-4 → adiciona espaço vertical de 1rem entre os filhos diretos do form. -->
     <div class="flex flex-col gap-3">
       <!--  flex → ativa flexbox.
@@ -20,6 +20,8 @@
               text-gray-700 → cor do texto cinza escuro. -->
         Usuário
         <input
+          #email
+          id="email"
           class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
                  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           formControlName="username"
@@ -42,6 +44,8 @@
       <label class="block text-sm font-medium text-gray-700">
         Senha
         <input
+          #password
+          id="password"
           type="password"
           class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
                  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -52,7 +56,7 @@
 
       <button
         type="submit"
-        [disabled]="form.invalid || loading()"
+        (click)="registerUser(email.value, password.value)"
         class="self-center inline-flex w-50 justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-white
                font-medium shadow-sm transition
                enabled:hover:bg-blue-700 enabled:active:bg-blue-800
@@ -74,7 +78,7 @@
             enabled:active:bg-indigo-800 → ao active (quando habilitado), fundo índigo 800.
             disabled:opacity-50 → quando desabilitado, opacidade 50%.
             disabled:cursor-not-allowed → cursor de “proibido” quando desabilitado. -->
-        Entrar
+        Cadastrar
       </button>
     </div>
   </form>
@@ -87,7 +91,5 @@
     <a routerLink="/" class="text-indigo-600 hover:underline">Voltar</a>
   </p> -->
 
-  <p class="mt-4">Não possui conta?
-    <a routerLink="/register" class="text-indigo-600 hover:underline">Cadastre-se</a>
-  </p>
+  
 </section>
