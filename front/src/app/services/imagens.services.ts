@@ -13,7 +13,7 @@ export type Imagem = {
 
 
 @Injectable({providedIn: 'root'})
-export class ImagemService{
+export class ImagensService{
     private http = inject(HttpClient)
     private base = `${environment.apiBase}/api/imagem/`
 
@@ -32,8 +32,9 @@ export class ImagemService{
         return this.http.post<Imagem>(this.base, {headers: this.headers()}) 
     }
 
-    deletar(id: number){
+
+    deletar(id: number){    
         return this.http.delete(`${this.base}${id}/`, {headers: this.headers()})
     }
-
+    
 }

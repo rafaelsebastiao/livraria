@@ -2,7 +2,10 @@ from pathlib import Path
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+#BASE DIR=> VAI pegar o endereço completo desde o C:\... até a pasta back
+#exemplo: C:\Users\44794549857\Documents\livraria\back
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -16,7 +19,6 @@ SECRET_KEY = 'django-insecure-a&yp2isytie9*sri5)j9=1^5nw-yl@tg*wlv3k+ey%igo#9at4
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 

@@ -3,7 +3,7 @@ import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../services/auth.services";
 import { HttpClient } from "@angular/common/http";
 import { ReactiveFormsModule, FormBuilder, Validators} from "@angular/forms";
-
+import {environment} from '../../../environments/environments'
 
 @Component({
     selector:'app-login.component',
@@ -11,7 +11,6 @@ import { ReactiveFormsModule, FormBuilder, Validators} from "@angular/forms";
     templateUrl:'./register.component.html'
     }
 )
-
 
 export class RegisterComponent {
     error = signal<String | null>(null)
@@ -33,15 +32,15 @@ export class RegisterComponent {
     ) {}
 
 
-    registerUser(username: string, password: string){
+    registerUser(username: string, password: string, confirmPassword: string){
         if (username == ''|| password == ''){
             alert("Insira os dados de forma correta!");
+        }else if(password != confirmPassword){
+            alert("As senhas devem ser iguais!")
         }else{
-            this.http.post('http://127.0.0.1:8000/api/register/', {
+            this.http.post(`${environment.apiBase}api/register/`, {
                 username: username,
                 password: password
-                
-
             }).subscribe({
                 next: res => {
                     alert('Cadastro realizado com sucesso!')

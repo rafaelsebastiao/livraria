@@ -1,12 +1,12 @@
 from django.urls import path
 from .views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 from rest_framework.routers import DefaultRouter
+
 
 router = DefaultRouter()
 router.register(r"imagens", ImagemViewSet, basename="imagens")
-
+router.register(r"livros", LivrosView, basename="livros")
 
 urlpatterns = [
     path('autores/', AutoresView.as_view(), name='autores-list'), 
@@ -14,9 +14,9 @@ urlpatterns = [
     path('authors', listar_autores, name='Listar Autores'),
    
     path('editoras/', EditorasView.as_view()),
-    path('editora/<int:pk>', EditorasDetailView.as_view()),
+    path('editora/<int:pk>', EditorasDetailView.as_view()), 
    
-    path('livros', LivrosView.as_view()),
+    # path('livros', LivrosView.as_view()),
     path('livro/<int:pk>', LivrosDetailView.as_view()),
     
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -24,7 +24,7 @@ urlpatterns = [
     
     path('register/', RegisterView.as_view(), name='register'),
     
-] 
+] + router.urls
 
 
-urlpatterns += router.urls
+# urlpatterns += router.urls

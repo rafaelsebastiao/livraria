@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Livro } from '../../models/livro';
-import { LivrosService } from '../../services/livros.services';
+import { BooksService } from '../../services/books.services';
 
 // export interface Livro{
 //     id: Number;
@@ -64,9 +64,9 @@ import { LivrosService } from '../../services/livros.services';
       </section>
     `
   })
-  export class LivrosPage {
-    private svc = inject(LivrosService);
-    private auth = inject(LivrosService);   //Ver o token
+  export class BooksPage {
+    private svc = inject(BooksService);
+    private auth = inject(BooksService);   //Ver o token
     livros = signal<Livro[]>([]);
     carregando = signal(true);
     erro = signal<string | null>(null);

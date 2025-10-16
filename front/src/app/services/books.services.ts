@@ -10,8 +10,7 @@ import {environment} from '../../environments/environments';
 
 
 
-
-export class LivrosService {
+export class BooksService {
   private http = inject(HttpClient);
   private base = environment.apiBase;
   

@@ -19,44 +19,57 @@
               font-medium → peso de fonte médio.
               text-gray-700 → cor do texto cinza escuro. -->
         Usuário
-        <input
-          #email
-          id="email"
-          class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
-                 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-          formControlName="username"
-          autocomplete="username"
-        />
-        <!--  mt-1 → margem superior de 0.25rem (separa do rótulo).
-              block → exibe como bloco.
-              w-full → largura 100%.
-              rounded-xl → cantos bem arredondados.
-              border → aplica borda padrão (1px sólida).
-              border-gray-300 → cor da borda cinza clara.
-              px-3 → padding horizontal 0.75rem.
-              py-2 → padding vertical 0.5rem.
-              focus:outline-none → remove o outline padrão do navegador ao focar.
-              focus:ring-2 → adiciona um anel (box-shadow) de 2px no foco.
-              focus:ring-indigo-500 → cor do anel no foco = índigo 500.
-              focus:border-indigo-500 → cor da borda no foco = índigo 500. -->
+       
       </label>
 
-      <label class="block text-sm font-medium text-gray-700">
-        Senha
-        <input
-          #password
-          id="password"
-          type="password"
-          class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
-                 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-          formControlName="password"
-          autocomplete="current-password"
-        />
-      </label>
+      <input
+      #email
+      id="email"
+      class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
+             focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+      formControlName="username"
+      autocomplete="username"
+    />
+    <!--  mt-1 → margem superior de 0.25rem (separa do rótulo).
+          block → exibe como bloco.
+          w-full → largura 100%.
+          rounded-xl → cantos bem arredondados.
+          border → aplica borda padrão (1px sólida).
+          border-gray-300 → cor da borda cinza clara.
+          px-3 → padding horizontal 0.75rem.
+          py-2 → padding vertical 0.5rem.
+          focus:outline-none → remove o outline padrão do navegador ao focar.
+          focus:ring-2 → adiciona um anel (box-shadow) de 2px no foco.
+          focus:ring-indigo-500 → cor do anel no foco = índigo 500.
+          focus:border-indigo-500 → cor da borda no foco = índigo 500. -->
+      <label class="block text-sm font-medium text-gray-700">Senha</label>
+
+      <input
+        #password
+        id="password"
+        type="password"
+        class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
+               focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+
+      <label class="block text-sm font-medium text-gray-700">Confirmar senha</label>
+      <input
+        #confirmPassword
+        id="confirmPassword"
+        type="password"
+        class="mt-1 block w-full rounded-xl border border-gray-300 px-3 py-2
+               focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        formControlName="confirmPassword"
+        autocomplete="current-password"
+      />
+
+
 
       <button
         type="submit"
-        (click)="registerUser(email.value, password.value)"
+        (click)="registerUser(email.value, password.value, confirmPassword.value)"
         class="self-center inline-flex w-50 justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-white
                font-medium shadow-sm transition
                enabled:hover:bg-blue-700 enabled:active:bg-blue-800
@@ -86,10 +99,10 @@
   @if (error()) {
     <p class="text-red-600 mt-3">{{ error() }}</p>
   }
-<!-- 
-  <p class="mt-4">
-    <a routerLink="/" class="text-indigo-600 hover:underline">Voltar</a>
-  </p> -->
 
+
+  <p class="mt-4">
+    <a routerLink="/login" class="text-indigo-600 hover:underline">Voltar</a>
+  </p>
   
 </section>
