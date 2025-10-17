@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Editora } from '../../models/editora';
-import { EditorasService } from '../../services/editoras.services';
+import { Publisher } from '../../models/publisher';
+import { PublishersService } from '../../services/publishers.services';
 
 
 @Component({
@@ -37,9 +37,9 @@ import { EditorasService } from '../../services/editoras.services';
     `
   })
   export class EditorasPage {
-    private svc = inject(EditorasService);
-    private auth = inject(EditorasService);   //Ver o token
-    editoras = signal<Editora[]>([]);
+    private svc = inject(PublishersService);
+    private auth = inject(PublishersService);   //Ver o token
+    editoras = signal<Publisher[]>([]);
     carregando = signal(true);
     erro = signal<string | null>(null);
   

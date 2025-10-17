@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {Editora} from "../models/editora";
+import {Publisher} from "../models/publisher";
 import {environment} from '../../environments/environments';
 
 
@@ -10,14 +10,14 @@ import {environment} from '../../environments/environments';
 })
 
 
-export class EditorasService {
+export class PublishersService {
   private http = inject(HttpClient);
   private base = environment.apiBase;
   
 
-  listar():Observable<Editora[]> {
+  listar():Observable<Publisher[]> {
     const url = `${this.base}api/editoras/`;
-    return this.http.get<Editora[]>(url);
+    return this.http.get<Publisher[]>(url);
     
   }
 }

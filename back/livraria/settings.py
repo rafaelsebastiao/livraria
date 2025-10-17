@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import timedelta
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #BASE DIR=> VAI pegar o endereço completo desde o C:\... até a pasta back
@@ -38,18 +39,26 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware"
-
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+# CORS_ALLOW_ALL_ORIGINS = [
+#     "http://localhost:4000",
+#     "http://127.0.0.1:4200",
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000"
+# ]
+
 
 ROOT_URLCONF = 'livraria.urls'
 

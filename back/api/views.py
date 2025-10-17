@@ -61,10 +61,13 @@ class EditorasDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = EditoraSerializer
     permission_classes =[IsAuthenticated]
 
-class LivrosView(ModelViewSet):
-    queryset = Livro.objects.all().order_by("-id")
+class LivrosView(ListCreateAPIView):
+    queryset = Livro.objects.all().select_related('autor')
     serializer_class = LivroSerializer
-    parser_classes = [MultiPartParser, FormParser]  # aceita multipart
+    # parser_classes = [MultiPartParser, FormParser]  # aceita multipart
+    ordering = ['titulo']
+    ordering_fields = ['id', 'titulo']
+
 
     @action(detail=True, methods=["post"], parser_classes=[MultiPartParser, FormParser])
     def capa(self, request, pk=None):
@@ -80,7 +83,7 @@ class LivrosView(ModelViewSet):
 
 class LivrosDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Livro.objects.all()	
-    serializer_class = LivroSerializer
+    serializer_class = LivroSerializer  
     permission_classes =[IsAuthenticated]
 
 

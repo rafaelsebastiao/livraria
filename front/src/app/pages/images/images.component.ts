@@ -1,18 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImagensService, Imagem } from '../../services/imagens.services';
+import { ImagesService, Image } from '../../services/images.services';
 import { environment } from '../../../environments/environments.prod';
 
 @Component({
   standalone: true,
   selector: 'app-imagens',
   imports: [CommonModule],
-  templateUrl: './images.component.html',
-  styleUrl: './images.component.css'
+  templateUrl: './images.component.html'
 })
-export class ImagensComponent {
-  private svc = inject(ImagensService);
-  imagens = signal<Imagem[]>([]);
+
+
+export class ImagesComponent {
+  private svc = inject(ImagesService);
+  imagens = signal<Image[]>([]);
   status = '';
   arquivo: File | null = null;
   preview: string | null = null;

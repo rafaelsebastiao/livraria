@@ -4,7 +4,7 @@ import { Observable } from "rxjs"
 import { environment } from "../../environments/environments"
 
 
-export type Imagem = {
+export type Image = {
     id: number;
     imagem: string;
     url: string;
@@ -13,23 +13,23 @@ export type Imagem = {
 
 
 @Injectable({providedIn: 'root'})
-export class ImagensService{
+export class ImagesService{
     private http = inject(HttpClient)
-    private base = `${environment.apiBase}/api/imagem/`
+    private base = `${environment.apiBase}/api/imagens`
 
     private headers(): HttpHeaders{
         const token = localStorage.getItem('acess')
         return token ? new HttpHeaders({Autorization: `Bear${token}`}) : new HttpHeaders()
     }
     
-    listar(): Observable<Imagem[]>{
-        return this.http.get<Imagem[]>(this.base, {headers: this.headers()})   
+    listar(): Observable<Image[]>{
+        return this.http.get<Image[]>(this.base, {headers: this.headers()})   
     }
     
-    enviar(file: File): Observable<Imagem>{
+    enviar(file: File): Observable<Image>{
         const form= new FormData()
         form.append("imagem", file)
-        return this.http.post<Imagem>(this.base, {headers: this.headers()}) 
+        return this.http.post<Image>(this.base, {headers: this.headers()}) 
     }
 
 

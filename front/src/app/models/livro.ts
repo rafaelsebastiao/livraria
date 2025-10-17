@@ -1,5 +1,5 @@
 export interface Livro{
-    id: Number;
+    id: number;
     titulo: string;
     subtitulo: string;
     autor: string;
@@ -7,18 +7,17 @@ export interface Livro{
     isbn: string | null;
     descricao: string;
     idioma: string;
-    ano: Number;
-    paginas: Number;
-    preco: Number
-    estoque: Number;
-    desconto: Number;
-    disponivel: Number;
-    dimensoes: string
-    peso: Number
+    ano: number;
+    paginas:number;
+    preco: number
+    estoque: number;
+    desconto: number;
+    disponivel:number;
+    dimensoes: string,
+    peso: number,
+    capa: string,
+    
 }
-
-
-
 
 /*
 class Livro(models.Model):

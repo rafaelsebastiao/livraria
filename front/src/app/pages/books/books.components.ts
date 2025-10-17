@@ -1,80 +1,121 @@
 import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Livro } from '../../models/livro';
 import { BooksService } from '../../services/books.services';
-
-// export interface Livro{
-//     id: Number;
-//     titulo: string;
-//     subtitulo: string;
-//     autor: string;
-//     editora: string;
-//     isbn: string | null;
-//     descricao: string;
-//     idioma: string;
-//     ano: Number;
-//     paginas: Number;
-//     preco: Number
-//     estoque: Number;
-//     desconto: Number;
-//     disponivel: Number;
-//     dimensoes: string
-//     peso: Number
-// }
-
-
-
+import { Livro } from '../../models/livro';
+import { AuthService } from '../../services/auth.services';
+import { environment } from '../../../environments/environments';
 
 @Component({
-    standalone: true,
-    imports: [RouterLink],
-    template: `
-      <section style="max-width:900px;margin:2rem auto;padding:0 1rem">
-        <h1>Livros</h1>
-  
-        @if (carregando()) {
-          <p>Carregando…</p>
-        } @else if (erro()) {
-          <p style="color:#c62828">{{ erro() }}</p>
-        } @else {
-          <ul style="padding-left:1.25rem">
-            @for (a of livros(); track a.id) {
-              <li style="margin:.25rem 0">
-                <strong>{{ a.titulo }} {{ a.subtitulo}}</strong>
-                @if (a.autor) { — <em style="color:#666">{{ a.autor}}</em> }
-                @if (a.editora) { • {{ a.editora }} }
-                @if (a.isbn) { <div style="color:#555">{{ a.isbn }}</div>}
-                @if (a.descricao) { <div style="color:#555">{{ a.descricao }}</div>}
-                @if (a.idioma) { <div style="color:#555">{{ a.idioma}}</div>}
-                @if (a.ano) { <div style="color:#555">{{ a.ano}}</div>}
-                @if (a.paginas) { <div style="color:#555">{{ a.paginas}}</div>}
-                @if (a.preco) { <div style="color:#555">{{ a.preco}}</div>}
-                @if (a.estoque) { <div style="color:#555">{{ a.estoque}}</div>}
-                @if (a.desconto) { <div style="color:#555">{{ a.desconto}}</div>}
-                @if (a.disponivel) { <div style="color:#555">{{ a.disponivel}}</div>}
-                @if (a.dimensoes) { <div style="color:#555">{{ a.dimensoes}}</div>}
-                @if (a.peso) { <div style="color:#555">{{ a.peso}}</div>}
-              </li>
-            }
-          </ul>
-        }
-        <nav style="margin-top:1rem">
-          <a routerLink="/">Voltar ao início</a>
-        </nav>
-      </section>
-    `
-  })
-  export class BooksPage {
-    private svc = inject(BooksService);
-    private auth = inject(BooksService);   //Ver o token
-    livros = signal<Livro[]>([]);
-    carregando = signal(true);
-    erro = signal<string | null>(null);
-  
-    constructor() {
-      this.svc.listar().subscribe({
-        next: (data) => { this.livros.set(data); this.carregando.set(false); },
-        error: () => { this.erro.set('Falha ao carregar livros'); this.carregando.set(false); }
-      });
-    }
+  selector: 'app-books',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './books.component.html'
+})
+export class BooksComponent {
+  private svc = inject(BooksService);
+  private auth = inject(AuthService);
+
+  livros = signal<Livro[]>([]);
+  carregando = signal(true);
+  erro = signal<string | null>(null);
+
+  apiBase = (environment.apiBase ?? '').replace(/\/+$/, '');
+
+  // controle local de upload
+  private pendentes = new Map<number, File>();
+  private previews = new Map<number, string>();
+  private upStatus = new Map<number, 'idle' | 'up' | 'ok' | 'err'>();
+
+  constructor() {
+    console.log('Token de acesso:', this.auth.token());
+
+    // Carregar lista inicial de livros
+    this.svc.listar({ ordering: 'titulo' }).subscribe({
+      next: (data) => {
+        this.livros.set(data);
+        this.carregando.set(false);
+      },
+      error: () => {
+        this.erro.set('Falha ao carregar livros');
+        this.carregando.set(false);
+      },
+    });
   }
+
+  /** Retorna o id único para o input file */
+  fileInputId(id: number): string {
+    return `file-capa-${id}`;
+  }
+
+  /** Retorna a URL da capa do livro (preview local ou do servidor) */
+  capaSrc(l: Partial<Livro> & { id?: number }): string | null {
+    const lid = Number(l?.id ?? (l as any)?.pk ?? -1);
+    const prv = this.previews.get(lid);
+    if (prv) return prv;
+
+    const anyL = l as any;
+    if (anyL?.capa_url) return String(anyL.capa_url);
+
+    if (l.capa) {
+      const rel = String(l.capa);
+      const path = rel.startsWith('/media/') ? rel : `/media/${rel}`;
+      return `${this.apiBase}${path}`;
+    }
+    return null;
+  }
+
+  /** Retorna o status do upload de um livro */
+  statusUpload(id: number): 'idle' | 'up' | 'ok' | 'err' {
+    return this.upStatus.get(id) ?? 'idle';
+  }
+
+  /** Ao selecionar uma nova capa */
+  async onSelect(e: Event, id: number) {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    // Criar preview local
+    const url = URL.createObjectURL(file);
+    const old = this.previews.get(id) || null;
+    this.previews.set(id, url);
+    this.pendentes.set(id, file);
+    this.upStatus.set(id, 'up');
+
+    // Enviar para o backend (PATCH /api/livro/:id/)
+    this.svc.enviarCapa(id, file).subscribe({
+      next: (livroAtualizado) => {
+        // Atualiza a lista com o retorno do servidor
+        this.livros.update((arr) =>
+          arr.map((l) =>
+            Number((l as any).id ?? (l as any).pk) === id
+              ? livroAtualizado
+              : l
+          )
+        );
+
+        this.upStatus.set(id, 'ok');
+        this.pendentes.delete(id);
+
+        // Revogar preview temporário
+        setTimeout(() => {
+          const u = this.previews.get(id);
+          if (u && u.startsWith('blob:')) URL.revokeObjectURL(u);
+          this.previews.delete(id);
+        }, 500);
+      },
+      error: (err) => {
+        console.error(err);
+        this.upStatus.set(id, 'err');
+
+        // Restaurar preview anterior
+        const u = this.previews.get(id);
+        if (u && u.startsWith('blob:')) URL.revokeObjectURL(u);
+        if (old) this.previews.set(id, old);
+        else this.previews.delete(id);
+
+        this.erro.set('Falha ao enviar capa');
+      },
+    });
+  }
+}

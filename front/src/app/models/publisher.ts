@@ -1,4 +1,4 @@
-export interface Editora {
+export interface Publisher {
     id: Number;
     editora: Number;
     cnpj: string;
