@@ -1,29 +1,22 @@
+
 from pathlib import Path
 from datetime import timedelta
 from corsheaders.defaults import default_headers
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-#BASE DIR=> VAI pegar o endereço completo desde o C:\... até a pasta back
-#exemplo: C:\Users\44794549857\Documents\livraria\back
-BASE_DIR = Path(__file__).resolve().parent.parent
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "authorization",
+]
 
-MEDIA_URL = '/media/'
+BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / 'media'
 
+SECRET_KEY = 'django-insecure-#8y71#h%-=1il2w*9)v=8!e&ivjpi4c3%z)(%la+@yrfradlti'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a&yp2isytie9*sri5)j9=1^5nw-yl@tg*wlv3k+ey%igo#9at4'
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ['*']
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,12 +24,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
+    'corsheaders',
+    'api', 
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_filters',
-    'corsheaders'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -46,17 +49,17 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOW_ALL_ORIGINS = False
-
-# CORS_ALLOW_ALL_ORIGINS = [
-#     "http://localhost:4000",
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:4200",
 #     "http://127.0.0.1:4200",
 #     "http://localhost:8000",
-#     "http://127.0.0.1:8000"
+#     "http://127.0.0.1:8000",
 # ]
 
 
@@ -69,6 +72,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -81,7 +85,7 @@ WSGI_APPLICATION = 'livraria.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -92,26 +96,38 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # (opcional) Verifica se a senha é muito parecida com atributos do usuário
+    # (ex.: username, nome, e-mail). Evita senhas derivadas dos dados do próprio usuário.
+    
+    #{'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+
+    # "A senha é muito curta. Deve conter pelo menos 8 caracteres."
+    # Define o tamanho mínimo da senha (ajuste o min_length conforme sua política).
+   
+    #{'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 8}},
+
+    # "Esta senha é muito comum."
+    # Compara a senha com uma lista de senhas conhecidas/comuns. Opcionalmente,
+    # você pode informar sua própria lista com 'password_list_path'.
+    
+    #{'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+     # opcional: 'OPTIONS': {'password_list_path': '/caminho/para/sua-lista.txt'}
+    #},
+
+    # "Esta senha é inteiramente numérica."
+    # Reprova senhas compostas apenas por dígitos.
+    
+    #{'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
+
+
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+# https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -123,25 +139,11 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    ]
-}
-
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-}
