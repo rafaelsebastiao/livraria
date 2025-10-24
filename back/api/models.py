@@ -50,7 +50,6 @@ class Livro(models.Model):
     peso =	models.DecimalField(max_digits=10, decimal_places=2)        #DecimalField	Peso em gramas, se for físico
     capa = models.ImageField(upload_to=path_capa, blank=True, null=True)
 
-
     def __str__(self):
         return self.titulo
     

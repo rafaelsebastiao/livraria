@@ -6,21 +6,19 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
-
 from rest_framework_simplejwt.tokens import RefreshToken
 
 # Filters
-from .filters import AutorFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
+from .filters import AutorFilter, EditoraFilter, LivroFilter
 
 #Imagens
 from rest_framework.viewsets import ModelViewSet
 from .models import Imagem
 from .serializers import ImagemSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
-
 
 
 @api_view(['GET', 'POST'])
@@ -36,14 +34,18 @@ def listar_autores(request):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class AutoresView(ListCreateAPIView):
     queryset = Autor.objects.all()
     serializer_class = AutorSerializer
     # permission_classes =[IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    # filterset_fields = ['id']               # Permite o filtro exato
-    # search_fields = ['nome', 'sobrenome']   # busca parcial: ?search=Jorge
+    filterset_fields = ['id', 'titulo']                 # Permite o filtro exato
+    search_fields = ['autor', 's_autor', 'nasc']   # busca parcial: ?search=Jorge
+    ordering = ['autor']
+    ordering_fields = ['id', 'autor']
+
     filterset_class = AutorFilter           # Caso queira filtro duplo "Nome" e "Nacionalidade"
     
 class AutoresDetailView(RetrieveUpdateDestroyAPIView):
@@ -51,29 +53,38 @@ class AutoresDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = AutorSerializer
     permission_classes =[IsAuthenticated]
 
-
 class EditorasView(ListCreateAPIView):
     queryset = Editora.objects.all()
     serializer_class = EditoraSerializer
     # permission_classes =[IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['id', 'editora']
-    search_fields = ['editora']  
+    # filterset_fields = ['id', 'editora']
+
+    search_fields = ['editora'] 
+    ordering_fields = ['id', 'editora']
+    ordering = ['editora']
+  
+    filterset_class = EditoraFilter
 
 class EditorasDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Editora.objects.all()
     serializer_class = EditoraSerializer
-    permission_classes =[IsAuthenticated]
-
+    # permission_classes =[IsAuthenticated]
 
 class LivrosView(ListCreateAPIView):
-    queryset = Livro.objects.all().select_related('autor')
+    queryset = Livro.objects.all()
     serializer_class = LivroSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    search_fields = ['titulo', 'autor__nome', 'autor__sobrenome']
+    filterset_fields = ['id']
+    search_fields = ['titulo', 'subtitulo',  'autor__nome']
     ordering_fields = ['id', 'titulo']
     ordering = ['titulo']
 
+
+
+    filterset_class = LivroFilter
+
+    
 class LivrosDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Livro.objects.all()
     serializer_class = LivroSerializer
@@ -84,9 +95,11 @@ class LivroViewSet(ModelViewSet):
     serializer_class = LivroSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # se você criou o LivroFilter com autor/titulo:
-    search_fields = ['titulo', 'autor__nome', 'autor__sobrenome']
+    search_fields = ['titulo', 'autor__nome', 'autor__sobrenome', 'editora']
     ordering_fields = ['id', 'titulo']
     ordering = ['titulo']
+
+    queryAutor = Autor.objects.all()
 
 class RegisterView(CreateAPIView):
     permission_classes = [AllowAny]
@@ -112,6 +125,7 @@ class LivroViewSet(ModelViewSet):
     queryset = Livro.objects.all().order_by("-id")
     serializer_class = LivroSerializer
     parser_classes = [MultiPartParser, FormParser]  # aceita multipart
+
 
     @action(detail=True, methods=["post"], parser_classes=[MultiPartParser, FormParser])
     def capa(self, request, pk=None):

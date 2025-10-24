@@ -17,6 +17,7 @@ class EditoraSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class LivroSerializer(serializers.ModelSerializer):
     capa_url = serializers.SerializerMethodField()
     
@@ -49,10 +50,6 @@ class LivroSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.capa.url)  
         return None
 
-
-        
-        
-        
 
 # === ADICIONE: serializer de registro de usuário ===
 User = get_user_model()
@@ -90,3 +87,4 @@ class ImagemSerializer(serializers.ModelSerializer):
         if request:
             return request.build.absolute_uri(obj.imagem.url)
         return obj.imagem.url
+    
